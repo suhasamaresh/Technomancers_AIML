@@ -1,0 +1,35 @@
+
+{
+  "compilerOptions": {
+      "target": "ES2017", // Modern JavaScript target
+      "lib": ["dom", "dom.iterable", "esnext"], // Include DOM and ES features
+      "allowJs": true, // Allow JavaScript files
+      "skipLibCheck": true, // Skip library type checks
+      "strict": true, // Enable strict type checking
+      "noEmit": true, // Prevent emitting JavaScript files
+      "esModuleInterop": true, // Allow ES module imports
+      "module": "esnext", // Use ESNext module resolution
+      "moduleResolution": "node", // Resolve modules using Node.js conventions
+      "resolveJsonModule": true, // Allow importing JSON files
+      "isolatedModules": true, // Isolate modules for compatibility
+      "jsx": "preserve", // Keep JSX in files
+      "incremental": true, // Enable incremental builds
+      "plugins": [
+        {
+          "name": "next" // Use Next.js plugin for type checking
+        }
+      ],
+      "paths": {
+        "@/*": ["./*"] // Define custom module path aliases
+      },
+      "forceConsistentCasingInFileNames": true // Enforce case-sensitive imports
+    },
+    "include": [
+      "next-env.d.ts", // Include Next.js environment declarations
+      "**/*.ts", // Include all TypeScript files
+      "**/*.tsx", // Include all TypeScript JSX files
+      "!app/summarize_job/[id]/page.tsx", // Exclude the missing file
+      ".next/types/**/*.ts" // Include Next.js generated type files
+    ],
+    "exclude": ["node_modules", "build", "dist", ".next", "out"] // Exclude unnecessary directories
+  }

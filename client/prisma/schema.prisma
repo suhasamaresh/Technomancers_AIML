@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define the User table with password for authentication and resume URL
+model User {
+  id              Int         @id @default(autoincrement())
+  name            String
+  email           String      @unique
+  password        String      // Stores the hashed password for authentication
+  resumeUrl       String      // Firebase file URL for the resume
+  techStack       String      // A comma-separated list of technologies the user knows
+  interests       String      // A comma-separated list of user interests
+  relevanceScore  Float?      // AI-powered skill compatibility percentage
+  roadmap         String?     // AI-driven improvement roadmap (can be a JSON or text)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  jobApplications JobApplication[]
+  recruiters      Recruiter[]
+}
+
+// Define a Job Application table to store user job applications
+model JobApplication {
+  id            Int       @id @default(autoincrement())
+  userId        Int       // Foreign key to User
+  jobTitle      String    // Title of the job applied for
+  company       String    // Company name
+  applicationUrl String   // URL of the job posting
+  applicationDate DateTime @default(now()) // Date the application was made
+  status        String    // Status of the application (e.g., "Pending", "Interview", "Rejected", "Accepted")
+  
+  user User @relation(fields: [userId], references: [id])
+}
+
+// Define a Job table to store job postings
+model Job {
+  id          Int       @id @default(autoincrement())
+  title       String    // Job title
+  company     String    // Company name
+  description String    // Job description
+  location    String    // Job location
+  skills      String    // Required skills for the job
+  postedAt    DateTime  @default(now()) // Date the job was posted
+  applicationUrl String // URL to apply for the job
+  relevanceScore Float // Relevance score for the user
+}
+
+// Define a Recruiter table to store recruiter information
+model Recruiter {
+  id          Int       @id @default(autoincrement())
+  name        String    // Recruiter's name
+  company     String    // Company the recruiter is associated with
+  linkedinUrl String    // URL to the recruiter's LinkedIn profile
+  jobTitles   String    // Job titles or industries the recruiter specializes in
+  userId      Int       // Foreign key to User
+  user        User      @relation(fields: [userId], references: [id])
+}
+
+model JobListing {
+  id          Int       @id @default(autoincrement())  // Unique identifier for each job listing
+  title       String    // Job title
+  company     String    // Company name
+  experience  String    // Experience level required (e.g., "2-3 years")
+  salary      String    // Salary range or "Not disclosed"
+  location    String    // Location of the job
+  jobUrl      String    // URL for the job posting
+  postedAt    DateTime  @default(now())  // Date when the job was posted
+  createdAt   DateTime  @default(now())  // Date when the job was added to the database
+  updatedAt   DateTime  @updatedAt  // Timestamp for updates to the listing
+}
